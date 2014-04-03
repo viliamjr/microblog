@@ -1,0 +1,8 @@
+{{if .Username}}
+	<b>Wellcome {{.Username}}!</b> <a href="/logout">Logout!</a>
+{{else}}
+	<form method="post" action="/login">
+		Login: <input type="text" name="username">
+		<input type="submit" value="Go">
+	</form>
+{{end}}
