@@ -1,5 +1,11 @@
 {{if .Username}}
-	<b>Wellcome {{.Username}}!</b> <a href="/logout">Logout!</a>
+	<b>Wellcome {{.Username}}!</b> <a href="/logout">Logout!</a> <br/>
+	<ul>
+		{{range $element := .PostsData}}
+			<li>Title: {{$element.Title}}</li>
+			<li>Post: {{$element.Text}}</li>
+		{{end}}
+	</ul>
 {{else}}
 	<form method="post" action="/login">
 		Login: <input type="text" name="username">

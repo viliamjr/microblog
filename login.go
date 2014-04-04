@@ -1,12 +1,21 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+	"io/ioutil"
 	"net/http"
 )
+
+type Post struct {
+	Title string
+	Text  string
+}
+
+type Posts []Post
 
 func main() {
 
@@ -27,22 +36,36 @@ func main() {
 
 func Index(session sessions.Session, r render.Render) {
 
-	var data = struct{ Username string }{}
+	var session_data = struct {
+		Username  string
+		PostsData Posts
+	}{}
+
 	v := session.Get("username")
+
 	if v != nil {
-		data.Username = v.(string)
+		session_data.Username = v.(string)
 	}
-	r.HTML(200, "index", data)
+
+	resp, _ := http.Get("http://127.0.0.1:3001/posts") //XXX handle error
+	defer resp.Body.Close()
+	data, _ := ioutil.ReadAll(resp.Body) //XXX handle error
+
+	var posts Posts
+	json.Unmarshal(data, &posts) //XXX handle error
+	session_data.PostsData = posts
+
+	r.HTML(200, "index", session_data)
 }
 
-func Login(session sessions.Session, r *http.Request, w http.ResponseWriter) {
+func Login(session sessions.Session, r *http.Request, render render.Render) {
 
 	session.Set("username", r.FormValue("username"))
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	render.Redirect("/")
 }
 
-func Logout(session sessions.Session, r *http.Request, w http.ResponseWriter) {
+func Logout(session sessions.Session, render render.Render) {
 
 	session.Delete("username")
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	render.Redirect("/")
 }
