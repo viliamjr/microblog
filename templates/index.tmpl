@@ -1,5 +1,5 @@
 {{if .Username}}
-	<b>Wellcome {{.Username}}!</b> <a href="/logout">Logout!</a> <br/>
+	<b>Wellcome {{.Username}}!</b> <a href="/blog/register">New!</a> <a href="/logout">Logout!</a> <br/>
 	<ul>
 		{{range $element := .PostsData}}
 			<li>Title: {{$element.Title}}</li>

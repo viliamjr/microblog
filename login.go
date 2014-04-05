@@ -47,7 +47,7 @@ func Index(session sessions.Session, r render.Render) {
 		session_data.Username = v.(string)
 	}
 
-	resp, _ := http.Get("http://127.0.0.1:3001/posts") //XXX handle error
+	resp, _ := http.Get("http://foojr.com/blog/posts") //XXX handle error
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body) //XXX handle error
 
