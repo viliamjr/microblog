@@ -5,6 +5,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
+	"microblog/core"
 	"net/http"
 )
 
@@ -29,6 +30,7 @@ func main() {
 
 	m.Use(sessions.Sessions("user_control", session_store))
 	m.Use(render.Renderer())
+	m.Use(core.Auth("user", "passwd"))
 
 	m.Get("/posts", PostsHandler)
 	m.Post("/post", PostHandler)
@@ -36,11 +38,13 @@ func main() {
 	m.Run()
 }
 
-func PostsHandler(session sessions.Session, r render.Render) {
+func PostsHandler(session sessions.Session, r render.Render, auth core.AuthData) {
 
-	//XXX how authorize API: service <=> service
-
-	r.JSON(200, postsdb)
+	if auth.Check() {
+		r.JSON(200, postsdb)
+	} else {
+		r.JSON(http.StatusUnauthorized, struct{ Error string }{"Not Authorized"})
+	}
 }
 
 func RegisterHandler(session sessions.Session, r render.Render) {

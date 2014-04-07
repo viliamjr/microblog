@@ -7,6 +7,7 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
 	"io/ioutil"
+	"microblog/core"
 	"net/http"
 )
 
@@ -27,6 +28,7 @@ func main() {
 
 	m.Use(sessions.Sessions("user_control", session_store))
 	m.Use(render.Renderer())
+	m.Use(core.Auth("user", "passwd"))
 
 	m.Get("/", Index)
 	m.Post("/login", Login)
@@ -34,7 +36,7 @@ func main() {
 	m.Run()
 }
 
-func Index(session sessions.Session, r render.Render) {
+func Index(session sessions.Session, r render.Render, auth core.AuthData) {
 
 	var session_data = struct {
 		Username  string
@@ -47,7 +49,9 @@ func Index(session sessions.Session, r render.Render) {
 		session_data.Username = v.(string)
 	}
 
-	resp, _ := http.Get("http://foojr.com/blog/posts") //XXX handle error
+	req, _ := http.NewRequest("GET", "http://foojr.com/blog/posts", nil) //XXX handle error
+	resp, _ := auth.CheckRequest(req)
+
 	defer resp.Body.Close()
 	data, _ := ioutil.ReadAll(resp.Body) //XXX handle error
 
