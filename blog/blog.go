@@ -5,7 +5,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	"microblog/core"
+	"github.com/viliamjr/microblog/core"
 	"net/http"
 )
 
