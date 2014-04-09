@@ -38,7 +38,7 @@ func main() {
 	m.Run()
 }
 
-func PostsHandler(session sessions.Session, r render.Render, auth core.AuthData) {
+func PostsHandler(r render.Render, auth core.AuthData) {
 
 	if auth.Check() {
 		r.JSON(200, postsdb)
@@ -50,7 +50,6 @@ func PostsHandler(session sessions.Session, r render.Render, auth core.AuthData)
 func RegisterHandler(session sessions.Session, r render.Render) {
 
 	v := session.Get("username")
-
 	if v == nil {
 		r.Redirect("/")
 	} else {
@@ -60,9 +59,12 @@ func RegisterHandler(session sessions.Session, r render.Render) {
 
 func PostHandler(session sessions.Session, r *http.Request, render render.Render) {
 
-	title := r.FormValue("title")
-	text := r.FormValue("text")
-	post := Post{title, text}
-	postsdb = append(postsdb, post)
+	v := session.Get("username")
+	if v != nil {
+		title := r.FormValue("title")
+		text := r.FormValue("text")
+		post := Post{title, text}
+		postsdb = append(postsdb, post)
+	}
 	render.Redirect("/")
 }

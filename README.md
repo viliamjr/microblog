@@ -9,7 +9,7 @@ $ PORT=3000 go run login.go
 - the first instance of blog app:
 $ PORT=3001 go run blog.go
 
-- the second instance of blog app:
+- optionally, you can start a second instance of blog app:
 $ PORT=3002 go run blog.go
 
 2) Start nginx with the follow configuration:
@@ -38,5 +38,4 @@ $ PORT=3002 go run blog.go
         }
     }
 
-That is it. The apps are available at http://your-host-name.com/
-
+That is it. The apps are available at http://your-host-name.com/ as if it were a single app.

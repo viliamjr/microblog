@@ -1,3 +1,5 @@
 # sublime text config files
 *.sublime-*
 
+# gin binary files
+gin-bin
