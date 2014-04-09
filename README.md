@@ -1,7 +1,16 @@
+A very simple prototype (proof of concept) of Microservice architecture using [Go](golang.org/doc/) and [Nginx](nginx.org/en/docs/).
 
-**How to setup the environment**
+###What we have
+There is two apps, *login* and *blog*. Both control the user by session and the second one let the user post a blog entry.
 
-1) initialize the apps:
+###What we want
+As expected behaviour, the applications will be available at http://your-host-name.com/ as if it were one single app.
+
+*Note: both apps and the package core are organized into a single repository to make easier to visualize the prototype.*
+
+###Run
+
+1. Start the apps:
 
 - a login app instance:
 $ PORT=3000 go run login.go
@@ -12,30 +21,44 @@ $ PORT=3001 go run blog.go
 - optionally, you can start a second instance of blog app:
 $ PORT=3002 go run blog.go
 
-2) Start nginx with the follow configuration:
+2. Start nginx with the follow configuration:
 
-    upstream loginservice {
-        ip_hash;
-        server 127.0.0.1:3000;
+```
+upstream loginservice {
+    ip_hash;
+    server 127.0.0.1:3000;
+}
+
+upstream blogservice {
+    ## ip_hash;
+    server 127.0.0.1:3001;
+    server 127.0.0.1:3002 weight=3;
+}
+
+server {
+    listen       80;
+    server_name  your-host-name.com;
+
+    location /blog/ {
+        proxy_pass http://blogservice/;
     }
 
-    upstream blogservice {
-        ## ip_hash;
-        server 127.0.0.1:3001;
-        server 127.0.0.1:3002 weight=3;
+    location / {
+        proxy_pass http://loginservice;
     }
+}
+```
 
-    server {
-        listen       80;
-        server_name  your-host-name.com;
+3. Remember to define 'your-host-name.com' as a valid hostname at your *hosts* file.
 
-        location /blog/ {
-            proxy_pass http://blogservice/;
-        }
+**Have fun!**
 
-        location / {
-            proxy_pass http://loginservice;
-        }
-    }
+###References:
+* Microservices: http://martinfowler.com/articles/microservices.html
+* Nginx: http://nginx.org/en/docs/
+* Go: http://golang.org/doc/
+* Martini: https://github.com/go-martini/martini
 
-That is it. The apps are available at http://your-host-name.com/ as if it were a single app.
+###TODO
+* Change shared variables (keys and directories) to environment variables.
+* Provide some documentation: readme and golang style.
