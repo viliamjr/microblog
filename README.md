@@ -8,6 +8,18 @@ As expected behaviour, the applications will be available at http://your-host-na
 
 *Note: both apps and the package core are organized into a single repository to make easier to visualize the prototype.*
 
+###Setup
+
+1. Install [Go environment](http://golang.org/doc/install) and [Nginx server](http://nginx.org/en/docs/install.html).
+2. And get the source/dependencies using Go:
+```
+$ go get \
+github.com/viliamjr/microblog \
+github.com/go-martini/martini \
+github.com/martini-contrib/sessions \
+github.com/martini-contrib/render
+```
+
 ###Run
 
 Start the apps:
