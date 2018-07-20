@@ -1,14 +1,14 @@
 A very simple prototype (proof of concept) of Microservice architecture using [Go](http://golang.org/doc/) and [Nginx](http://nginx.org/en/docs/).
 
-###What we have
-There is two apps, *login* and *blog*. Both control the user by session and the second one let the user post a blog entry.
+### The services
+There is two webapps, **login** and **blog**. The *blog* app references the user using the session controlled by the *login* app.
 
-###What we want
-As expected behaviour, the applications will be available at http://your-host-name.com/ as if it were one single app.
+### Expected behaviour
+The application will be available at http://your-host-name.com/ as if there was only one single webapp.
 
-*Note: both apps and the package core are organized into a single repository to make easier to visualize the prototype.*
+> The source code is organized into a single repository to make easier to visualize the prototype.
 
-###Setup
+### Setup
 
 1. Install [Go environment](http://golang.org/doc/install) and [Nginx server](http://nginx.org/en/docs/install.html).
 2. And get the source/dependencies using Go:
@@ -20,7 +20,7 @@ github.com/martini-contrib/sessions \
 github.com/martini-contrib/render
 ```
 
-###Run
+### Run
 
 Start the apps:
 - a login app instance:
@@ -64,16 +64,16 @@ server {
     }
 }
 ```
-*Remember to define 'your-host-name.com' as a valid hostname at your hosts file.*
+Remember to define 'your-host-name.com' as a valid hostname at your hosts file.
 
 > Have fun!
 
-###References:
+### References:
 * Microservices: http://martinfowler.com/articles/microservices.html
 * Nginx: http://nginx.org/en/docs/
 * Go: http://golang.org/doc/
 * Martini: https://github.com/go-martini/martini
 
-###TODO
+### TODO
 * Change shared variables (keys and directories) to environment variables.
 * Provide some documentation: readme and golang style.
